@@ -159,18 +159,23 @@ export const updateRecordById = async ({id, data, tableName}) => {
     
     switch (tableName) {
         case 'user':
-            record = await prisma.user.update({
+            const user = await prisma.user.update({
                 where: {
                     id: Number(id),
                 },
+                include: userIncludes,
                 data,
             });
+            const { userToken, ...userWithoutToken } = user || {};
+            record = user ? userWithoutToken : user;
+            // console.log(record);
             break;
         case 'department':
             record = await prisma.department.update({
                 where: {
                     id: Number(id),
                 },
+                include: includes,
                 data,
             });
             break;
@@ -179,6 +184,7 @@ export const updateRecordById = async ({id, data, tableName}) => {
                 where: {
                     id: Number(id),
                 },
+                include: includes,
                 data,
             });
             break;

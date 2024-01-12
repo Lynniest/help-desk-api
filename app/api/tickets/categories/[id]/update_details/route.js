@@ -16,10 +16,10 @@ export async function POST(request, context) {
         return NextResponse.json({message: "Category details updated Successfully.", Category: updatedCate}, { status: 200 });
     } catch (error) {
         if (error.code==='P2002'){
-            return NextResponse.json({error: {message: "Category name already exists"}}, { status: 400 })
+            return NextResponse.json({error: {message: "Category name already exists", details: error}}, { status: 400 })
         }
         // console.log(error)
-        return NextResponse.json({error: {message: "Failed to update category details"}}, { status: 400 })
+        return NextResponse.json({error: {message: "Failed to update category details", details: error}}, { status: 400 })
     }
 
 }

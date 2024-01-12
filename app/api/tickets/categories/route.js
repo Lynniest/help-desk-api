@@ -23,9 +23,9 @@ export const POST = async(request) =>{
     }catch(error){
 
         if (error instanceof ZodError) {
-            return NextResponse.json({error: {message: "Failed to add new ticket category.", details:error.issues}}, { status: 400 });
+            return NextResponse.json({error: {message: "Failed to add new ticket category.", details:error}}, { status: 400 });
         }
         // console.log(error);
-        return new Response(JSON.stringify({error: {message: "Failed to add new ticket category"}}), {status: 400})
+        return new Response(JSON.stringify({error: {message: "Failed to add new ticket category", details:error}}), {status: 400})
     }
 }

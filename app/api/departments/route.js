@@ -27,6 +27,6 @@ export const POST = async(request) =>{
         return NextResponse.json({error: { message: "Failed to add new department.", details:error.issues}}, { status: 400 });
     }
         // console.log(error);
-        return new Response(JSON.stringify({error: {message: "Failed to add new department"}}), {status: 400})
+        return new Response(JSON.stringify({error: {message: "Failed to add new department", details: error}}), {status: 400})
     }
 }

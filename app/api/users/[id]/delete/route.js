@@ -23,9 +23,9 @@ export async function POST(request, context) {
     } catch (error) {
         // console.log(error)
         if (error.name === "PrismaClientKnownRequestError"){
-            return NextResponse.json({error: {modelName: error.meta.modelName, message: error.meta.cause}}, { status: 400 })
+            return NextResponse.json({error: {message: error.meta.cause, details: error}}, { status: 400 })
         }
-        return NextResponse.json({error: {error, message: "Failed to delete user."}}, { status: 400 })
+        return NextResponse.json({error: {message: "Failed to delete user.", details: error}}, { status: 400 })
     }
 
 }

@@ -40,10 +40,13 @@ export async function POST(request) {
     } catch (error) {
         
         if (error instanceof ZodError) {
-            return NextResponse.json({error: {message: "Failed to add new ticket.", details:error.issues}}, { status: 400 });
+            return NextResponse.json({error: {message: "Failed to add new ticket.", details: error   }}, { status: 400 });
+        }
+        else if (error.code==='P2003'){
+            return NextResponse.json({error: {message: "Foreign Key Not Found.", details: error}}, { status: 400 })
         }
 
         // console.log(error)
-        return new Response(JSON.stringify({error: "Failed to add new ticket"}), { status: 400 })
+        return new Response(JSON.stringify({error: "Failed to add new ticket", details: error}), { status: 400 })
     }
 }

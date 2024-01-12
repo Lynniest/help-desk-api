@@ -12,7 +12,7 @@ export async function POST(request) {
       return NextResponse.json("Email Sent");
   }
   catch(error){
-      return NextResponse.json({error: {message: "Page Not Found"}}, { status: 404 })
+      return NextResponse.json({error: {message: "Page Not Found", details: error}}, { status: 404 })
   }
 
   

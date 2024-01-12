@@ -13,7 +13,7 @@ export const GET = async (request, context) => {
         return NextResponse.json(records);
     } catch (error) {
         // console.log(error)
-        return NextResponse.json({error: {error, message: "failed to find tickets!"}}, { status: 400 })
+        return NextResponse.json({error: {message: "failed to find tickets!", details: error}}, { status: 400 })
     }
 
 }

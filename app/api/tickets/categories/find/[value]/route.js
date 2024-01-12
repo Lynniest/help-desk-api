@@ -9,7 +9,7 @@ export const GET = async (request, context) => {
         return NextResponse.json(records);
     } catch (error) {
         // console.log(error);
-        return NextResponse.json({error: {error, message: "Failed to find ticket categories"}}, { status: 400 })
+        return NextResponse.json({error: {message: "Failed to find ticket categories", details: error}}, { status: 400 })
     }
 
 }

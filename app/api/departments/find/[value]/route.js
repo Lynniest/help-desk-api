@@ -8,7 +8,7 @@ export const GET = async (request, context) => {
     const records = await findMultiRecords("departmentName", value, 'department');
     return NextResponse.json(records);
     } catch (error) {
-        return NextResponse.json({error: {error, message: "Failed to find departments!"}}, { status: 400 })
+        return NextResponse.json({error: {error, message: "Failed to find departments!", details: error}}, { status: 400 })
     }
 
 }
