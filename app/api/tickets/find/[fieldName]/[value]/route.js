@@ -9,9 +9,9 @@ export const GET = async (request, context) => {
         if (fieldName === "issuerId" || fieldName === "departmentId" || fieldName === "categoryId" || fieldName === "assigneeId") {
             parsedValue = parseInt(value, 10);
     }
-    const records = await findMultiRecords(fieldName, parsedValue, 'ticket');
-    records = sortTicketsByStatus(records, 'all', 'all');
-        return NextResponse.json(records);
+    const tickets = await findMultiRecords(fieldName, parsedValue, 'ticket');
+    records = sortTicketsByStatus(tickets, 'all', 'all');
+        return NextResponse.json(tickets);
     } catch (error) {
         // console.log(error)
         return NextResponse.json({error: {message: "failed to find tickets!", details: error}}, { status: 400 })
