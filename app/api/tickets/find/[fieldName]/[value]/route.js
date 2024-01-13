@@ -1,6 +1,6 @@
 import {NextResponse} from 'next/server';
 
-import {  findMultiRecords } from '@/app/lib/functions';
+import {  findMultiRecords, sortTicketsByStatus } from '@/app/lib/functions';
 
 export const GET = async (request, context) => {
     const {fieldName, value} = context.params;
@@ -10,6 +10,7 @@ export const GET = async (request, context) => {
             parsedValue = parseInt(value, 10);
     }
     const records = await findMultiRecords(fieldName, parsedValue, 'ticket');
+    records = sortTicketsByStatus(records, 'all', 'all');
         return NextResponse.json(records);
     } catch (error) {
         // console.log(error)

@@ -1,6 +1,7 @@
 import p from '@/app/lib/prisma';
 import cron from "node-cron";
 import crypto from "crypto";
+import { count } from 'console';
 
 const prisma = p;
 
@@ -150,9 +151,70 @@ export const findAllRecords = async (tableName) => {
         default:
             throw new Error(`Invalid table name: ${tableName}`);
     }
-    
+
+    if (records) {
+        var record_count = records.length;
+        console.log(!records[0].submittedTickets)
+        records = {count: record_count, records}
+    }
     return records;
 }
+
+export const sortTicketsByStatus = (records, status_name, priority_name) => {
+    if (status_name === "none") return sortTicketsByPriority(records, priority_name);
+    else{
+        status_name === "all" ? status_name = ["pending", "inProgress", "open", "closed"] : status_name = status_name.split("&");
+    }
+    
+    let sorted_tickets = null;
+    const record_count = records.length;
+    var pending_list = []
+    var inProgress_list = []
+    var open_list = []
+    var closed_list = []
+    
+    // console.log("Org Record: "+records[0])
+    records.map((ticket) => {
+                if(status_name.includes("pending")) ticket.status === "Pending" && pending_list.push(ticket)
+                if(status_name.includes("inProgress")) ticket.status === "In_Progress" && inProgress_list.push(ticket)
+                if( status_name.includes("open")) ticket.status === "Open" && open_list.push(ticket)
+                if( status_name.includes("closed")) ticket.status === "Closed" && closed_list.push(ticket) 
+            })
+    sorted_tickets = {...(status_name.includes("pending") ||status_name.includes("inProgress") ||status_name.includes("open") ||status_name.includes("closed")  ? {total_tickets: pending_list.length+inProgress_list.length+open_list.length+closed_list.length} : {}),
+                            ...(status_name.includes("pending") ? {pendingTickets: {count: pending_list.length, tickets: sortTicketsByPriority(pending_list, priority_name)}} : {}),
+                            ...(status_name.includes("inProgress") ? {inProgressTickets: {count: inProgress_list.length, tickets: sortTicketsByPriority(inProgress_list, priority_name)}} : {}),
+                            ...(status_name.includes("open") ? {openTickets: {count: open_list.length, tickets: sortTicketsByPriority(open_list, priority_name)}} : {}),
+                            ...(status_name.includes("closed") ? {closedTickets: {count: closed_list.length, tickets: sortTicketsByPriority(closed_list, priority_name)}} : {}),
+                            }
+
+    // sorted_tickets = sortTicketsByPriority(pending_list, priority_name)
+    // sorted_tickets = by_status_sorted_tickets
+    return sorted_tickets;
+
+}
+
+const sortTicketsByPriority = (records, priority_name) => {
+    var by_priority_list = { criticalList: [], moderateList:[], mediumList:[], lowList:[]}
+    if (priority_name === "none") return records;   
+    else{
+        priority_name === "all" ? priority_name = ["critical", "moderate", "medium", "low"] : priority_name = priority_name.split("&");
+    }     
+        records.map((ticket) => {
+                if(priority_name==="all" || priority_name.includes("critical")) ticket.priority === "Critical" && by_priority_list.criticalList.push(ticket)
+                if(priority_name==="all" ||priority_name.includes("moderate")) ticket.priority === "Moderate" && by_priority_list.moderateList.push(ticket)
+                if(priority_name==="all" || priority_name.includes("medium")) ticket.priority === " Medium" && by_priority_list.mediumList.push(ticket)
+                if(priority_name==="all" || priority_name.includes("low")) ticket.priority == "Low" && by_priority_list.lowList.push(ticket)
+    }) 
+console.log(by_priority_list)
+    const sorted_tickets =  {...(priority_name.includes("critical") ||priority_name.includes("moderate") ||priority_name.includes("medium") ||priority_name.includes("low")  ? {total_tickets: by_priority_list.criticalList.length+by_priority_list.moderateList.length+by_priority_list.mediumList.length+by_priority_list.lowList.length} : {}),
+                            ...(priority_name.includes("critical") || priority_name === "all" ? {ticketsInCritical: {count: by_priority_list.criticalList.length, tickets: by_priority_list.criticalList}} : {}),
+                            ...(priority_name.includes("moderate") || priority_name === "all" ? {ticketsInModerate: {count: by_priority_list.moderateList.length, tickets: by_priority_list.moderateList}} : {}),
+                            ...(priority_name.includes("medium") || priority_name === "all" ? {ticketsInMedium: {count: by_priority_list.mediumList.length, tickets: by_priority_list.mediumList}} : {}),
+                            ...(priority_name.includes("low")  || priority_name === "all" ? {ticketsInLow: {count: by_priority_list.lowList.length, tickets: by_priority_list.lowList}} : {}),
+                            }
+return sorted_tickets;
+}
+
 
 export const updateRecordById = async ({id, data, tableName}) => {
     let record = null;
