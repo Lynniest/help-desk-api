@@ -1,8 +1,12 @@
 import {NextResponse} from 'next/server';
 
-import {  findMultiRecords, sortTicketsByStatus } from '@/app/lib/functions';
+import {  findMultiRecords, sortTicketsByStatus, userTokenValidation } from '@/app/lib/functions';
 
 export const GET = async (request, context) => {
+    const token = await userTokenValidation(request);
+    if (!token) {
+      return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
+    }
     const {fieldName, value} = context.params;
     let parsedValue = value;
     try {
@@ -10,7 +14,7 @@ export const GET = async (request, context) => {
             parsedValue = parseInt(value, 10);
     }
     const tickets = await findMultiRecords(fieldName, parsedValue, 'ticket');
-    const records = sortTicketsByStatus(tickets, 'all', 'all');
+    const records = sortTicketsByStatus(tickets, 'all', 'none');
         return NextResponse.json(records);
     } catch (error) {
         // console.log(error)

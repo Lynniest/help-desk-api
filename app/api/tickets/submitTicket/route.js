@@ -3,12 +3,16 @@
 import { ticketSchema } from '@/app/lib/schema_validation';
 import {NextResponse } from 'next/server'
 import p from '@/app/lib/prisma';
-import { findAllRecords } from '@/app/lib/functions';
+import { findAllRecords, userTokenValidation } from '@/app/lib/functions';
 import {ZodError} from "zod";
 
 const prisma = p;
 
 export const GET = async (request, context) => {
+    const token = await userTokenValidation(request);
+    if (!token) {
+      return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
+    }
     const allTickets = await findAllRecords('ticket');
     return NextResponse.json(allTickets);
 }

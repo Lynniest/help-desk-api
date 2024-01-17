@@ -96,7 +96,7 @@ export const findMultiRecords = async (fieldName, value, tableName) => {
     switch (tableName) {
         case 'user':
             let users = [];
-            fieldName === "userType" ? 
+            fieldName === "userType" || fieldName==="emailVerified" ? 
             users = await prisma.user.findMany(findObjForEnums(fieldName, value, userIncludes)) :
             users = await prisma.user.findMany(findObj(fieldName, value));
             records = users.map(({ userToken, ...userWithoutToken }) => userWithoutToken);
@@ -160,7 +160,7 @@ export const findAllRecords = async (tableName) => {
     return records;
 }
 
-export const sortTicketsByStatus = (records, status_name, priority_name) => {
+export const sortTicketsByStatus = (records, status_name, priority_name) => {f
     if (status_name === "none") return sortTicketsByPriority(records, priority_name);
     else{
         status_name === "all" ? status_name = ["pending", "inProgress", "open", "closed"] : status_name = status_name.split("&");

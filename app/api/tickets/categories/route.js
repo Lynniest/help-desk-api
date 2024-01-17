@@ -1,11 +1,15 @@
 import {NextResponse} from 'next/server';
 import { ticketCategorySchema } from '@/app/lib/schema_validation';
-import { findAllRecords } from '@/app/lib/functions';
+import { findAllRecords, userTokenValidation } from '@/app/lib/functions';
 
 import p from '@/app/lib/prisma';
 const prisma = p;
 
 export const GET = async(request) =>{
+    const token = await userTokenValidation(request);
+    if (!token) {
+      return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
+    }
     const categories = await findAllRecords('ticketCategory');
     return NextResponse.json(categories);
 }

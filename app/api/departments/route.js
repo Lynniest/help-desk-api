@@ -1,12 +1,16 @@
 import {NextResponse} from 'next/server';
 import { deptSchema } from '@/app/lib/schema_validation';
-import { findAllRecords } from '@/app/lib/functions';
+import { findAllRecords, userTokenValidation } from '@/app/lib/functions';
 import {ZodError} from "zod";
 import p from '@/app/lib/prisma';
 
 const prisma = p;
 
 export const GET = async() =>{
+    const token = await userTokenValidation(request);
+    if (!token) {
+      return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
+    }
     const depts = await findAllRecords('department');
     return NextResponse.json(depts);
 }
