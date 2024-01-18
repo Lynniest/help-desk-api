@@ -10,7 +10,7 @@ export async function GET(request, context) {
       const { userId } = jwt.verify(token, process.env.JWT_SECRET);
 
       const updatedUser = await updateRecordById({tableName: 'user',id: userId,data: { emailVerified: true }});
-      scheduleTokenUpdates(updatedUser.id)
+      await scheduleTokenUpdates(updatedUser.id)
       return NextResponse.redirect(`${process.env.HOST_URL}/register/verify_email/status/success`)
       // return NextResponse.json({ message: 'Email verified successfully', user: updatedUser }, {status: 200});
     } catch (error) {

@@ -20,17 +20,16 @@ export async function POST(request) {
       username: body.username,
       email: body.email,
       phoneNo: body.phoneNo,
-      password: hashPassword(body.password),
+      password: await hashPassword(body.password),
       userType: body.userType,
       emailVerified: false,
     };
 
     const newUser = await createUser(data);
     await sendVerificationEmail(newUser.email, newUser.id);
-    await scheduleTokenUpdates(newUser.id);
 
-    return NextResponse.redirect(`${process.env.HOST_URL}/register/verify_email/${newUser.email}/${newUser.id}`);
-    // return NextResponse.json({ message: "Verification email sent successfully.", user: newUser }, { status: 200 });
+    // return NextResponse.redirect(`${process.env.HOST_URL}/register/verify_email/${newUser.email}/${newUser.id}`);
+    return NextResponse.json({ message: "Verification email sent successfully.", user: newUser }, { status: 200 });
 
   } catch (error) {
     if (error instanceof ZodError) {
