@@ -1,4 +1,5 @@
 import { scheduleTokenUpdates, createUser } from "@/app/lib/functions";
+import { hashPassword } from "@/app/lib/passwordFun";
 import { userSchema } from "@/app/lib/schema_validation";
 const { sendVerificationEmail } = require("@/app/lib/send_mail");
 import { NextResponse } from "next/server";
@@ -19,7 +20,7 @@ export async function POST(request) {
       username: body.username,
       email: body.email,
       phoneNo: body.phoneNo,
-      password: body.password,
+      password: hashPassword(body.password),
       userType: body.userType,
       emailVerified: false,
     };
@@ -28,8 +29,8 @@ export async function POST(request) {
     await sendVerificationEmail(newUser.email, newUser.id);
     await scheduleTokenUpdates(newUser.id);
 
-    // return NextResponse.redirect(`${process.env.HOST_URL}/register/verify_email/${newUser.email}/${newUser.id}`);
-    return NextResponse.json({ message: "Verification email sent successfully.", user: newUser }, { status: 200 });
+    return NextResponse.redirect(`${process.env.HOST_URL}/register/verify_email/${newUser.email}/${newUser.id}`);
+    // return NextResponse.json({ message: "Verification email sent successfully.", user: newUser }, { status: 200 });
 
   } catch (error) {
     if (error instanceof ZodError) {
