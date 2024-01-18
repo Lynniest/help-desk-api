@@ -17,3 +17,15 @@ fetch(url, {
         // Handle any errors here
         console.error(error);
     });
+
+
+export async function scheduleTokenUpdates(userId) {
+    await updateUserToken(userId);
+    cron.schedule('0 0 * * *', () => {
+    updateUserToken(userId);
+  });
+//   cron.schedule('* * * * *', () => {
+//     updateUserToken(userId);
+//   });
+  console.log('Token update scheduled');
+}

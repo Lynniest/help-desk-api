@@ -289,7 +289,7 @@ export async function userTokenValidation(request) {
 }
 
 export async function scheduleTokenUpdates(userId) {
-    await updateUserToken(userId);
+    // await updateUserToken(userId);
     cron.schedule('0 0 * * *', () => {
     updateUserToken(userId);
   });
