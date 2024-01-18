@@ -12,12 +12,12 @@ export const POST = async (request, context) => {
       return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
     }
     try {
-        const deletedDept = await prisma.department.delete({
+        const deletedTicket = await prisma.ticket.delete({
             where: {
                 id: parsedValue<Infinity ? parsedValue : id,
             },
         });
-    return NextResponse.json({message: "Ticket Deleted Successfully.", department: deletedDept}, { status: 200 });
+    return NextResponse.json({message: "Ticket Deleted Successfully.", Ticket: deletedTicket}, { status: 200 });
     } catch (error) {
         // console.log(error)
         if (error.name === "PrismaClientKnownRequestError"){

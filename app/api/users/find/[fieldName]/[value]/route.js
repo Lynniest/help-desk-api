@@ -3,11 +3,11 @@ import {NextResponse} from 'next/server';
 import {  findMultiRecords, userTokenValidation } from '@/app/lib/functions';
 
 export const GET = async (request, context) => {
-    
-    const token = await userTokenValidation(request);
-    if (!token) {
-      return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
-    }
+
+    // const token = await userTokenValidation(request);
+    // if (!token) {
+    //   return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
+    // }
     
     const {fieldName, value} = context.params;
     const boolValue = value === 'true' ? true : false;
@@ -24,7 +24,7 @@ export const GET = async (request, context) => {
     return NextResponse.json(records);
     
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         return NextResponse.json({error: {message: "Failed to find users.", details: error}}, { status: 400 })
     }
 

@@ -20,7 +20,12 @@ export const GET = async (request, context) => {
 export async function POST(request) {
 
     const body = await request.json();
-    const valid = ticketSchema.parseAsync(body);
+    try {
+    const valid = await ticketSchema.parseAsync(body);
+    } catch (error) {
+    return NextResponse.json({ error: { message: 'Invalid request body', details: error.issues.map(e=>e.message) }}, { status: 400 });
+    }
+    
     try {
         const newTicket = await prisma.ticket.create({
             data:{
@@ -43,14 +48,11 @@ export async function POST(request) {
         
     } catch (error) {
         
-        if (error instanceof ZodError) {
-            return NextResponse.json({error: {message: "Failed to add new ticket.", details: error   }}, { status: 400 });
-        }
-        else if (error.code==='P2003'){
+        if (error.code==='P2003'){
             return NextResponse.json({error: {message: "Foreign Key Not Found.", details: error}}, { status: 400 })
         }
 
-        // console.log(error)
+        // console.log(error.name)
         return new Response(JSON.stringify({error: "Failed to add new ticket", details: error}), { status: 400 })
     }
 }

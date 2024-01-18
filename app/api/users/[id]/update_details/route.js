@@ -21,7 +21,7 @@ export async function POST(request, context) {
         if (error.code==='P2002'){
             return NextResponse.json({error: {message: "User name already exists", details: error}}, { status: 400 })
         }
-        console.log(error)
+        // console.log(error)
         return NextResponse.json({error: "Failed to update user details", details: error}, { status: 400 })
     }
 

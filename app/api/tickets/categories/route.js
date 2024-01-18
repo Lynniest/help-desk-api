@@ -13,10 +13,14 @@ export const GET = async(request) =>{
     const categories = await findAllRecords('ticketCategory');
     return NextResponse.json(categories);
 }
-
+'Title must be unique.'
 export const POST = async(request) =>{
     const body = await request.json();
-    const valid = await ticketCategorySchema.parseAsync(body);
+    try {
+            const valid = await ticketSchema.parseAsync(body);
+        } catch (error) {
+    return NextResponse.json({ error: { message: 'Invalid request body', details: error.issues.map(e=>e.message) }}, { status: 400 });
+        }
     try{
         const newCate = await prisma.ticketCategory.create({
             data:{
@@ -25,10 +29,6 @@ export const POST = async(request) =>{
         })
         return NextResponse.json({message: "New Ticket Category added successfully.", department: newCate}, { status: 200});
     }catch(error){
-
-        if (error instanceof ZodError) {
-            return NextResponse.json({error: {message: "Failed to add new ticket category.", details:error}}, { status: 400 });
-        }
         // console.log(error);
         return new Response(JSON.stringify({error: {message: "Failed to add new ticket category", details:error}}), {status: 400})
     }

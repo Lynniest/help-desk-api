@@ -8,9 +8,13 @@ import { ZodError } from "zod";
 export async function POST(request) {
 
   const body = await request.json();
+  try {
+        const valid = await ticketSchema.parseAsync(body);
+    } catch (error) {
+  return NextResponse.json({ error: { message: 'Invalid request body', details: error.issues.map(e=>e.message) }}, { status: 400 });
+    }
 
   try {
-    const valid = await userSchema.parseAsync(body);
     // console.log(valid);
 
     const data = {

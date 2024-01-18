@@ -1,7 +1,6 @@
 import p from '@/app/lib/prisma';
 import cron from "node-cron";
 import crypto from "crypto";
-import { count } from 'console';
 
 const prisma = p;
 
@@ -154,13 +153,13 @@ export const findAllRecords = async (tableName) => {
 
     if (records) {
         var record_count = records.length;
-        console.log(!records[0].submittedTickets)
+        // console.log(!records[0].submittedTickets)
         records = {count: record_count, records}
     }
     return records;
 }
 
-export const sortTicketsByStatus = (records, status_name, priority_name) => {f
+export const sortTicketsByStatus = (records, status_name, priority_name) => {
     if (status_name === "none") return sortTicketsByPriority(records, priority_name);
     else{
         status_name === "all" ? status_name = ["pending", "inProgress", "open", "closed"] : status_name = status_name.split("&");
@@ -205,7 +204,7 @@ const sortTicketsByPriority = (records, priority_name) => {
                 if(priority_name==="all" || priority_name.includes("medium")) ticket.priority === " Medium" && by_priority_list.mediumList.push(ticket)
                 if(priority_name==="all" || priority_name.includes("low")) ticket.priority == "Low" && by_priority_list.lowList.push(ticket)
     }) 
-console.log(by_priority_list)
+// console.log(by_priority_list)
     const sorted_tickets =  {...(priority_name.includes("critical") ||priority_name.includes("moderate") ||priority_name.includes("medium") ||priority_name.includes("low")  ? {total_tickets: by_priority_list.criticalList.length+by_priority_list.moderateList.length+by_priority_list.mediumList.length+by_priority_list.lowList.length} : {}),
                             ...(priority_name.includes("critical") || priority_name === "all" ? {ticketsInCritical: {count: by_priority_list.criticalList.length, tickets: by_priority_list.criticalList}} : {}),
                             ...(priority_name.includes("moderate") || priority_name === "all" ? {ticketsInModerate: {count: by_priority_list.moderateList.length, tickets: by_priority_list.moderateList}} : {}),
@@ -296,7 +295,7 @@ export async function scheduleTokenUpdates(userId) {
 //   cron.schedule('* * * * *', () => {
 //     updateUserToken(userId);
 //   });
-  console.log('Token update scheduled');
+//   console.log('Token update scheduled');
 }
 
 export async function updateUserToken(userId) {
@@ -308,7 +307,7 @@ export async function updateUserToken(userId) {
   });
   } catch (error) {
     if (error.code === 'P2002') {
-      console.log('Unique constraint violation: ', error.meta.target);
+    //   console.log('Unique constraint violation: ', error.meta.target);
       updateUserToken(userId);
     }
   }

@@ -6,7 +6,7 @@ import p from '@/app/lib/prisma';
 
 const prisma = p;
 
-export const GET = async() =>{
+export const GET = async(request) =>{
     const token = await userTokenValidation(request);
     if (!token) {
       return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
@@ -18,7 +18,11 @@ export const GET = async() =>{
 export const POST = async(request) =>{
 
     const body = await request.json();
-    const valid = await deptSchema.parseAsync(body);
+    try {
+        const valid = await ticketSchema.parseAsync(body);
+    } catch (error) {
+  return NextResponse.json({ error: { message: 'Invalid request body', details: error.issues.map(e=>e.message) }}, { status: 400 });
+    }
     try{
         const newDept = await prisma.department.create({
             data:{

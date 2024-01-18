@@ -1,16 +1,13 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/eB8tkEErKYc
- */
+"use client";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { addNewUser } from "./lib/actions"
+// import { addNewUser } from "./lib/actions"
 
 export default function Component() {
   return (
-    <form action={addNewUser}>
+    <form action="">
           <div className="mx-auto max-w-md space-y-6">
       <div className="space-y-2 text-center">
         <h1 className="text-3xl font-bold">Register</h1>
