@@ -57,7 +57,7 @@ export const findSingleRecord = async (fieldName, value, tableName) => {
                 include: userIncludes,
             });
             if (user) {
-                const { userToken, ...userWithoutToken } = user;
+                const { userToken,password, ...userWithoutToken } = user;
                 record = userWithoutToken;
             }
             break;
@@ -98,7 +98,7 @@ export const findMultiRecords = async (fieldName, value, tableName) => {
             fieldName === "userType" || fieldName==="emailVerified" ? 
             users = await prisma.user.findMany(findObjForEnums(fieldName, value, userIncludes)) :
             users = await prisma.user.findMany(findObj(fieldName, value));
-            records = users.map(({ userToken, ...userWithoutToken }) => userWithoutToken);
+            records = users.map(({ userToken,password, ...userWithoutToken }) => userWithoutToken);
             break;
         case 'ticket':
             fieldName === "priority" || fieldName === "status" ? 
@@ -136,7 +136,7 @@ export const findAllRecords = async (tableName) => {
     switch (tableName) {
         case 'user':
             const users = await prisma.user.findMany({include: userIncludes});
-            users ? records = users.map(({ userToken, ...userWithoutToken }) => userWithoutToken) : records = users;
+            users ? records = users.map(({ userToken,password, ...userWithoutToken }) => userWithoutToken) : records = users;
             break;
         case 'department':
             records = await prisma.department.findMany({include: includes});
@@ -159,7 +159,7 @@ export const findAllRecords = async (tableName) => {
     return records;
 }
 
-export const sortTicketsByStatus = (records, status_name, priority_name) => {f
+export const sortTicketsByStatus = (records, status_name, priority_name) => {
     if (status_name === "none") return sortTicketsByPriority(records, priority_name);
     else{
         status_name === "all" ? status_name = ["pending", "inProgress", "open", "closed"] : status_name = status_name.split("&");
@@ -227,7 +227,7 @@ export const updateRecordById = async ({id, data, tableName}) => {
                 include: userIncludes,
                 data,
             });
-            const { userToken, ...userWithoutToken } = user || {};
+            const { userToken,password, ...userWithoutToken } = user || {};
             record = user ? userWithoutToken : user;
             // console.log(record);
             break;
