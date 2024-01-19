@@ -15,16 +15,17 @@ export async function GET(request) {
       where: {
         emailVerified: true,
       },
-    });   
-    users && users.map(async(user)=>{
+    });
+    console.log(users)
+    users.map(async (user)=>{
+      // console.log("Before "+ JSON.stringify(user.userToken))
       await updateUserToken(user.id);
+      // console.log("After "+ JSON.stringify(user.userToken))
     })
+
     return NextResponse.json({ message: "Schedule Updated Successfully." }, {status: 200});
     
   } catch (error) {
-    if (error.code === 'P2002') {
-      console.log('Unique constraint violation: ', error.meta.target);
-    }
     return NextResponse.json({ message: "Failed to schedule tokens.", details: error}, {status: 400});
   }
 
