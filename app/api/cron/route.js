@@ -21,7 +21,7 @@ export async function GET(request) {
     return NextResponse.json({ message: "Schedule Updated Successfully." }, {status: 200});
     
   } catch (error) {
-    return NextResponse.json({ message: "Failed to schedule tokens." }, {status: 400});
+    return NextResponse.json({ message: "Failed to schedule tokens.", details: error}, {status: 400});
   }
 
   
