@@ -16,7 +16,7 @@ export async function GET(request) {
         emailVerified: true,
       },
     });
-    console.log(users)
+    // console.log(users)
     users.map(async (user)=>{
       // console.log("Before "+ JSON.stringify(user.userToken))
       await updateUserToken(user.id);
