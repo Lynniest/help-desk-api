@@ -11,7 +11,7 @@ fetch(url, {
     .then(response => response.json())
     .then(data => {
         // Process the response data here
-        console.log(data);
+        // console.log(data);
     })
     .catch(error => {
         // Handle any errors here
@@ -30,5 +30,5 @@ export async function scheduleTokenUpdates(userId) {
 //   cron.schedule('* * * * *', () => {
 //     updateUserToken(userId);
 //   });
-  console.log('Token update scheduled');
+  // console.log('Token update scheduled');
 }
