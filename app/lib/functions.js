@@ -1,7 +1,6 @@
 import p from '@/app/lib/prisma';
 import cron from "node-cron";
 import crypto from "crypto";
-import { count } from 'console';
 
 const prisma = p;
 
