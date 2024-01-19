@@ -17,10 +17,10 @@ export async function GET(request) {
       },
     });
     // console.log(users)
-    users.map(async (user)=>{
-      // console.log("Before "+ JSON.stringify(user.userToken))
+    users && users.map(async (user)=>{
+      console.log("Before "+ JSON.stringify(user.userToken))
       await updateUserToken(user.id);
-      // console.log("After "+ JSON.stringify(user.userToken))
+      console.log("After "+ JSON.stringify(user.userToken))
     })
 
     return NextResponse.json({ message: "Schedule Updated Successfully." }, {status: 200});

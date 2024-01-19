@@ -6,7 +6,7 @@ import p from '@/app/lib/prisma';
 
 const prisma = p;
 
-export const GET = async() =>{
+export const GET = async(request) =>{
     const token = await userTokenValidation(request);
     if (!token) {
       return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
