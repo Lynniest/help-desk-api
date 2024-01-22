@@ -1,4 +1,5 @@
 import { findSingleRecord } from "@/app/lib/functions";
+import { sendEmail } from "@/app/lib/send_mail";
 import {NextResponse} from "next/server";
 
 export const POST = async(request) =>{
@@ -11,9 +12,10 @@ export const POST = async(request) =>{
         }
         const {id, email} = user;
         await sendEmail(email, id, "resetPassword");  
-        return NextResponse.json({ message: "Email sent successfully.", user: newUser }, { status: 200 });
+        return NextResponse.json({ message: "Email sent successfully.", user: user }, { status: 200 });
 
     } catch (error) {
+        console.log(error);
         return NextResponse.json({error: {message: "Failed to send email to reset password.", details: error}}, {status: 400});
     }
     

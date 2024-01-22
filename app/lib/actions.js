@@ -13,8 +13,8 @@ export const submitResetPsw = async (token, previousState, formData) => {
     console.log("token "+token)
     console.log(formData)
     const { newPassword, confirmNewPassword } = Object.fromEntries(formData);    
-    // const { userId } = jwt.verify(token, process.env.JWT_SECRET);    
-    const userId = Number(token);
+    const { userId } = jwt.verify(token, process.env.JWT_SECRET);    
+    // const userId = Number(token);
     if(newPassword.length < 8){
          form_error.newPasswordField = "Password must be at least 8 characters long.";
          return form_error;
