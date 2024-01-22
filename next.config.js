@@ -8,11 +8,11 @@ module.exports = {
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: '/api/:path*',
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: '*', // Allow all origins
+            value: '*',
           },
           {
             key: 'Access-Control-Allow-Methods',
