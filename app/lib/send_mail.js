@@ -32,7 +32,7 @@ async function sendEmail(userEmail, userId, type) {
       subject: 'Reset Password',
       html: `
         <h2>Please click on the link below to reset your password</h2>
-        <p>${process.env.HOST_URL}/login/forgot_password/${token}</p>
+        <p>${process.env.HOST_URL}/reset_password/${token}</p>
       `,
     };
   }
