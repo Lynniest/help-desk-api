@@ -4,17 +4,17 @@ import {NextResponse} from "next/server";
 
 export const POST = async(request) => {
     const body = await request.json();
-    const {username, password} = body;
+    const {userCred, password} = body;
     let user = null;
     try {
         user = await prisma.user.findUnique({
             where: {
-                username: username,
+                username: userCred,
             }
         })
         if(!user) {user = await prisma.user.findUnique({
             where: {
-                email: username,
+                email: userCred,
             }
         })}
         if (user){
