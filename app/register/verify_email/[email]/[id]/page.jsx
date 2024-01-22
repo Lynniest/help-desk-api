@@ -22,7 +22,7 @@ const page = (request) => {
           </p>
         </div>
         <div className="mt-5">
-          <Button className="w-full bg-custom-btn" onClick={()=>{axios.post('/api/register/resend_email', { email: decodedEmail, id})}}>Resend Verification Email</Button>
+          <Button className="w-full bg-custom-btn" onClick={()=>{axios.post('/api/resend_email', { email: decodedEmail, id, type: "verification"})}}>Resend Verification Email</Button>
         </div>
       </div>
     </main>

@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-async function sendVerificationEmail(userEmail, userId) {
+async function sendEmail(userEmail, userId, type) {
 
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
   
@@ -13,18 +13,30 @@ async function sendVerificationEmail(userEmail, userId) {
       pass: process.env.MAIL_APP_PASSWORD,
     },
   });
+  let mailOptions = null;
+  if (type==="verification"){
+    mailOptions = {
+      from: "hdverifyemailtest@gmail.com",
+      to: userEmail,
+      subject: 'Email Verification',
+      html: `
+        <h2>Please click on the link below to verify your email</h2>
+        <p>${process.env.HOST_URL}/api/register/verify_email/${token}</p>
+      `,
+    };
+  }
+  else if (type==="resetPassword"){
+    mailOptions = {
+      from: "hdverifyemailtest@gmail.com",
+      to: userEmail,
+      subject: 'Reset Password',
+      html: `
+        <h2>Please click on the link below to reset your password</h2>
+        <p>${process.env.HOST_URL}/login/forgot_password/${token}</p>
+      `,
+    };
+  }
 
-  let mailOptions = {
-    from: "hdverifyemailtest@gmail.com",
-    to: userEmail,
-    subject: 'Email Verification',
-    html: `
-      <h2>Please click on the link below to verify your email</h2>
-      <p>${process.env.HOST_URL}/api/register/verify_email/${token}</p>
-    `,
-  };
-
-  await transporter.sendMail(mailOptions);
+  mailOptions && await transporter.sendMail(mailOptions);
 }
-module.exports = { sendVerificationEmail };
-// sendVerificationEmail("swanmhtetlynn@gmail.com", 1);
+module.exports = { sendEmail };

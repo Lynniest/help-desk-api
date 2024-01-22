@@ -6,6 +6,7 @@ import p from '@/app/lib/prisma';
 import { findAllRecords, userTokenValidation } from '@/app/lib/functions';
 import {ZodError} from "zod";
 
+
 const prisma = p;
 
 export const GET = async (request, context) => {
@@ -24,7 +25,7 @@ export async function POST(request) {
     try {
         const newTicket = await prisma.ticket.create({
             data:{
-                title: body.title,
+                title: body.title,   
                 description: body.description,
                 status: body.status? body.status :  "Pending",
                 priority: body.priority? body.priority : "Low",
