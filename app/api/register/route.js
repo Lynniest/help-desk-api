@@ -21,7 +21,7 @@ export async function POST(request) {
       email: body.email,
       phoneNo: body.phoneNo,
       password: await hashPassword(body.password),
-      userType: body.userType,
+      userType: body.userType ? body.userType : "User",
       emailVerified: false,
     };
 

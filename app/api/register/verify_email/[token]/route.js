@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { scheduleTokenUpdates, updateRecordById, updateUserToken } from '@/app/lib/functions';
 import {NextResponse} from 'next/server';
-// import { redirect } from 'next/navigation';
 
 export async function GET(request, context) {
     const { token } = context.params;

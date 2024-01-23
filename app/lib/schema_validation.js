@@ -14,7 +14,7 @@ export const userSchema = z.object({
   username: z.string().min(1, 'Username is required').max(255, 'Username must be less than 255 characters').refine(async(value)=>checkUserUnique("username", value), {message: "Username must be unique."}),
   password: z.string().min(8, 'Password must be at least 8 characters'),
   phoneNo: z.string().regex(/^\d{11}$/, 'Phone number must be 11 digits'),
-  userType: userType,
+  userType: userType.optional(),
 });
 
 // Ticket schema
