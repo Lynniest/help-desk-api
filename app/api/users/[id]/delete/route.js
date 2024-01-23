@@ -19,6 +19,7 @@ export async function POST(request, context) {
                 id: parsedValue < Infinity ? parsedValue : id,
             },
     })
+    prisma.disconnect();
     return NextResponse.json({message: "User Deleted Successfully.", user: deletedUser}, { status: 200 });
     } catch (error) {
         // console.log(error)

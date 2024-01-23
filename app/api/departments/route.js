@@ -25,6 +25,7 @@ export const POST = async(request) =>{
                 departmentName: body.departmentName,
             }
         })
+        prisma.disconnect();
         return NextResponse.json({message: "New Department added successfully.", department: newDept}, { status: 200});
     }catch(error){
          if (error instanceof ZodError) {
