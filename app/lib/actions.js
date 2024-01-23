@@ -28,7 +28,6 @@ export const submitResetPsw = async (token, previousState, formData) => {
         where: { id: userId },
         data: { password: await (hashPassword(newPassword)) },
     });
-    prisma.disconnect();
     // revalidate(`${process.env.HOST_URL}/reset_password/status/success`)
     // redirect(`${process.env.HOST_URL}/reset_password/status/success`, 'replace');
     return {success: true};

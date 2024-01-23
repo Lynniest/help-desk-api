@@ -40,7 +40,6 @@ export async function POST(request) {
             }
         
         })
-        prisma.disconnect();
         return NextResponse.json({message: "Ticket Added Successfully.", ticket: newTicket}, { status: 200});
         
     } catch (error) {

@@ -23,7 +23,6 @@ export const POST = async(request) =>{
                 categoryName: body.categoryName,
             }
         })
-        prisma.disconnect();
         return NextResponse.json({message: "New Ticket Category added successfully.", department: newCate}, { status: 200});
     }catch(error){
 

@@ -17,7 +17,6 @@ export async function GET(request) {
       },
     });
     // console.log(users)
-    prisma.disconnect();
 if(users) { 
     await Promise.all(users.map(async (user) => {
         // console.log("Before "+ JSON.stringify(user.userToken))

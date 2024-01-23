@@ -17,7 +17,6 @@ export const POST = async (request, context) => {
                 id: parsedValue<Infinity ? parsedValue : id,
             },
         });
-        prisma.disconnect();
     return NextResponse.json({message: "Ticket Deleted Successfully.", department: deletedDept}, { status: 200 });
     } catch (error) {
         // console.log(error)

@@ -1,3 +1,4 @@
+import { userTokenValidation } from "@/app/lib/functions";
 import { comparePassword } from "@/app/lib/passwordFun";
 import prisma from "@/app/lib/prisma";
 import {NextResponse} from "next/server";
@@ -17,7 +18,6 @@ export const POST = async(request) => {
                 email: userCred,
             }
         })}
-        prisma.disconnect();
         if (user){
             const correctPassword =  await comparePassword(password, user.password);
             if (correctPassword){

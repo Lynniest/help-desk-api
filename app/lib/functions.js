@@ -85,7 +85,7 @@ export const findSingleRecord = async (fieldName, value, tableName) => {
         default:
             throw new Error(`Invalid table name: ${tableName}`);
     }
-    prisma.disconnect();
+    
     return record;
 }
 
@@ -126,7 +126,7 @@ export const findMultiRecords = async (fieldName, value, tableName) => {
         default:
             throw new Error(`Invalid table name: ${tableName}`);
     }
-    prisma.disconnect();
+    
     return records;
 }
 
@@ -156,7 +156,6 @@ export const findAllRecords = async (tableName) => {
         // console.log(!records[0].submittedTickets)
         records = {count: record_count, records}
     }
-    prisma.disconnect();
     return records;
 }
 
@@ -212,7 +211,7 @@ const sortTicketsByPriority = (records, priority_name) => {
                             ...(priority_name.includes("medium") || priority_name === "all" ? {ticketsInMedium: {count: by_priority_list.mediumList.length, tickets: by_priority_list.mediumList}} : {}),
                             ...(priority_name.includes("low")  || priority_name === "all" ? {ticketsInLow: {count: by_priority_list.lowList.length, tickets: by_priority_list.lowList}} : {}),
                             }
-    return sorted_tickets;
+return sorted_tickets;
 }
 
 
@@ -261,7 +260,7 @@ export const updateRecordById = async ({id, data, tableName}) => {
         default:
             throw new Error(`Invalid table name: ${tableName}`);
     }
-    prisma.disconnect();
+    
     return record;
 }
 
@@ -319,7 +318,6 @@ export async function updateUserToken(userId) {
 export async function createUser(data) {
   try {
     const user = await prisma.user.create({ data });
-    prisma.disconnect();
     return user;
   } catch (error) {
     // console.log(error);
