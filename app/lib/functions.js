@@ -266,15 +266,13 @@ export const updateRecordById = async ({id, data, tableName}) => {
 
 export async function userTokenValidation(request) {
   const authHeader = await request.headers.get('authorization');
-//   console.log(authHeader)
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return false;
   }
 
   const token = await authHeader.split(' ')[1];
-//   console.log(token)
-
+  
   const user = await prisma.user.findUnique({
     where: {
       userToken: token
