@@ -6,9 +6,9 @@ import { sendEmail } from '@/app/lib/send_mail';
 export async function POST(request) {
   try{
       const body = await request.json()
-      const { email, id } = body;
+      const { email, id, type } = body;
       // console.log(body)
-      await sendEmail(email, id, "verification");
+      await sendEmail(email, id, type);
       return NextResponse.json({message: "Email Sent"}, {status: 200});
   }
   catch(error){

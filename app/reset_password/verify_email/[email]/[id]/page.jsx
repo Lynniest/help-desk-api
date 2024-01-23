@@ -17,12 +17,12 @@ const page = (request) => {
           <MailIcon className="mx-auto h-12 w-auto" />
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-gray-100">Check your email</h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            We have sent a verification link to your email address({decodedEmail}). Please check your email and click on the
-            verification link to complete the email verification process.
+            We have sent your email address({decodedEmail}) to reset your password. Please check your email and click on the
+            link to reset your password.
           </p>
         </div>
         <div className="mt-5">
-          <Button className="w-full bg-custom-btn" onClick={()=>{axios.post('/api/resend_email', { email: decodedEmail, id, type: "verification"})}}>Resend Verification Email</Button>
+          <Button className="w-full bg-custom-btn" onClick={()=>{axios.post('/api/resend_email', { email: decodedEmail, id, type: "resetPassword"})}}>Resend Email</Button>
         </div>
       </div>
     </main>
