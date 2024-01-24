@@ -24,9 +24,9 @@ export const POST = async(request) => {
                 const {password, ...userWithoutPassword} = user;
                 return NextResponse.json({message: "Login credentials correct.", currentUser: userWithoutPassword}, {status: 200})
             }
-            return NextResponse.json({error: {message: "Incorrect Credentials!", details: "Wrong Password!"}}, {status: 401})
+            return NextResponse.json({error: {message: "Incorrect Credentials!", details: "Wrong Password!"}}, {status: 404})
         }
-        return NextResponse.json({error: {message: "Incorrect Credentials!", details: "User Not Found!"}}, {status: 401})
+        return NextResponse.json({error: {message: "Incorrect Credentials!", details: "User Not Found!"}}, {status: 404})
 
     } catch (error) {
         return NextResponse.json({error: {message: "LogIn Failed.", details: error}}, {status: 400});

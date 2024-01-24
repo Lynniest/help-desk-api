@@ -8,7 +8,7 @@ export const POST = async(request) =>{
         const {userCred} = body;
         const user = await findSingleRecord("username", userCred, "user") || await findSingleRecord("email", userCred, "user");
         if(!user){
-            return NextResponse.json({error: {message: "Username or Email Not Found"}});
+            return NextResponse.json({error: {message: "Username or Email Not Found", details: `User Credential ${userCred} does not exist.`}}, {status: 404});
         }
         const {id, email} = user;
         await sendEmail(email, id, "resetPassword");  
