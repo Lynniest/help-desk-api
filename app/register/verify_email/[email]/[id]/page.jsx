@@ -5,7 +5,8 @@ import React from 'react'
 import axios from 'axios';
 
 const page = (request) => {
-    // console.log(request)
+    // console.log(request) 
+    // console.log(process.env.API_URL)
 
     const {email, id} = request.params;
     const decodedEmail = decodeURIComponent(email);
@@ -22,7 +23,7 @@ const page = (request) => {
           </p>
         </div>
         <div className="mt-5">
-          <Button className="w-full bg-custom-btn" onClick={()=>{axios.post('/api/resend_email', { email: decodedEmail, id, type: "verification"})}}>Resend Verification Email</Button>
+          <Button className="w-full bg-custom-btn" onClick={()=>{axios.post(`${process.env.API_URL}/resend_email`, { email: decodedEmail, id: id, type: "verification"})}}>Resend Verification Email</Button>
         </div>
       </div>
     </main>

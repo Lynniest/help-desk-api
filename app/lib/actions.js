@@ -6,12 +6,9 @@ import { permanentRedirect, redirect, useRouter, revalidate } from 'next/navigat
 import {NextResponse} from 'next/server';
 
 export const submitResetPsw = async (token, previousState, formData) => {
-    // "use client";
-    // const router = useRouter();
+
     let form_error = {};
-    console.log("previousState "+JSON.stringify(previousState))
-    console.log("token "+token)
-    console.log(formData)
+
     const { newPassword, confirmNewPassword } = Object.fromEntries(formData);    
     const { userId } = jwt.verify(token, process.env.JWT_SECRET);    
     // const userId = Number(token);
@@ -28,8 +25,7 @@ export const submitResetPsw = async (token, previousState, formData) => {
         where: { id: userId },
         data: { password: await (hashPassword(newPassword)) },
     });
-    // revalidate(`${process.env.HOST_URL}/reset_password/status/success`)
-    // redirect(`${process.env.HOST_URL}/reset_password/status/success`, 'replace');
+
     return {success: true};
     // router.push('/reset_password/status/success');
     } catch (error) {

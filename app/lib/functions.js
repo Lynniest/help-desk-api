@@ -13,6 +13,9 @@ const includes = {
     tickets: true,
 }
 
+const key = crypto.scryptSync(process.env.CRYPTO_PASSWORD, 'salt', 16);
+const iv = Buffer.from(process.env.CRYPTO_IV, 'hex');
+
 const findObj = (fieldName, value, i) => ({
                 where: {
                     [fieldName]: {
@@ -272,20 +275,23 @@ export async function userTokenValidation(request) {
     return false;
   }
 
-    const idNToken = await authHeader.split(' ')[1];
-    const [idToDecrypt, token] =  idNToken.split(':');
-    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    const token = await authHeader.split(' ')[1];
+    
+    const idToDecrypt =  token.split(':')[0];
+    // console.log(iv)
+    const decipher = crypto.createDecipheriv(process.env.ALGORITHM, key, iv);
 
-    let duid = decipher.update(idToDecrypt, 'hex', 'utf8');
+    let duid = decipher.update(idToDecrypt, 'hex','utf8');
+    
     duid += decipher.final('utf8');
 
   const user = await prisma.user.findUnique({
     where: {
+        userToken: token,
         id: Number(duid),
-        userToken: token
     }
   });
-
+//   console.log(user.id)
   if (!user) {
     return false;
   }
@@ -300,12 +306,10 @@ export async function scheduleTokenUpdates(userId) {
 }
 
 export async function updateUserToken(userId) {
+
     const ctoken = crypto.randomBytes(10).toString('hex');
 
-    const key = crypto.scryptSync(process.env.CRYPTO_PASSWORD, 'salt', 32);
-    const iv = crypto.randomBytes(16); 
-    const cipher = crypto.createCipheriv(process.env.CRYPTO_ALGORITMN, key, iv);
-
+    const cipher = crypto.createCipheriv(process.env.ALGORITHM, key, iv);
     let encryptedID = cipher.update(userId.toString(), 'utf8', 'hex');
     encryptedID += cipher.final('hex');
 
@@ -313,7 +317,7 @@ export async function updateUserToken(userId) {
 
   try {
     await prisma.user.update({
-    where: { id: userId },
+    where: { id: Number(userId) },
     data: { userToken: newToken },
   });
   } catch (error) {

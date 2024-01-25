@@ -7,7 +7,7 @@ export const GET = async (request, context) => {
         return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
     }
     const { status, priority} = context.params;
-    console.log(status, priority)
+    // console.log(status, priority)
     const tickets = await findAllRecords('ticket');
     const records = sortTicketsByStatus(tickets.records, status, priority);
     tickets.records = records;
