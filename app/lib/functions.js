@@ -272,12 +272,17 @@ export async function userTokenValidation(request) {
     return false;
   }
 
-  const token = await authHeader.split(' ')[1];
-//   console.log(token)
+    const idNToken = await authHeader.split(' ')[1];
+    const [idToDecrypt, token] =  idNToken.split(':');
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+
+    let duid = decipher.update(idToDecrypt, 'hex', 'utf8');
+    duid += decipher.final('utf8');
 
   const user = await prisma.user.findUnique({
     where: {
-      userToken: token
+        id: Number(duid),
+        userToken: token
     }
   });
 
@@ -289,18 +294,23 @@ export async function userTokenValidation(request) {
 }
 
 export async function scheduleTokenUpdates(userId) {
-    // await updateUserToken(userId);
     cron.schedule('0 0 * * *', () => {
     updateUserToken(userId);
   });
-//   cron.schedule('* * * * *', () => {
-//     updateUserToken(userId);
-//   });
-//   console.log('Token update scheduled');
 }
 
 export async function updateUserToken(userId) {
-  const newToken = crypto.randomBytes(10).toString('hex');
+    const ctoken = crypto.randomBytes(10).toString('hex');
+
+    const key = crypto.scryptSync(process.env.CRYPTO_PASSWORD, 'salt', 32);
+    const iv = crypto.randomBytes(16); 
+    const cipher = crypto.createCipheriv(process.env.CRYPTO_ALGORITMN, key, iv);
+
+    let encryptedID = cipher.update(userId.toString(), 'utf8', 'hex');
+    encryptedID += cipher.final('hex');
+
+    const newToken = `${encryptedID}:${ctoken}`;
+
   try {
     await prisma.user.update({
     where: { id: userId },
@@ -311,6 +321,9 @@ export async function updateUserToken(userId) {
     //   console.log('Unique constraint violation: ', error.meta.target);
       updateUserToken(userId);
     }
+    else{
+        throw new Error(error);
+    }
   }
 }
 
@@ -320,7 +333,7 @@ export async function createUser(data) {
     const user = await prisma.user.create({ data });
     return user;
   } catch (error) {
-    // console.log(error);
+    console.log(error);
       throw new Error(error);
 
   }

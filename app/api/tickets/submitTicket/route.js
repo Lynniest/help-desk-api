@@ -33,7 +33,7 @@ export async function POST(request) {
                 assigneeId: body.assigneeId? body.assigneeId : null,
                 startDate: body.startDate? body.startDate : null,
                 endDate: body.endDate? body.endDate : null,
-                submittedDate: new Date().toISOString(),
+                // submittedDate: new Date().toISOString(),
                 issuerId: body.issuerId,
                 departmentId: body.departmentId,
                 
@@ -51,7 +51,7 @@ export async function POST(request) {
             return NextResponse.json({error: {message: "Foreign Key Not Found.", details: error}}, { status: 400 })
         }
 
-        // console.log(error)
+        console.log(error)
         return new Response(JSON.stringify({error: "Failed to add new ticket", details: error}), { status: 400 })
     }
 }

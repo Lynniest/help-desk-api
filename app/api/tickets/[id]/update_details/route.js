@@ -17,7 +17,7 @@ export async function POST(request, context) {
         if (error.code==='P2002'){
             return NextResponse.json({error: {message: "Ticket name already exists", details: error}}, { status: 400 })
         }
-        // console.log(error)
+        console.log(error)
         return NextResponse.json({error: {message: "Failed to update ticket details.", details: error}}, { status: 400 })
     }
 

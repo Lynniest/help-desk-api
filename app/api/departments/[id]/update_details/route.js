@@ -18,7 +18,7 @@ export async function POST(request, context) {
         if (error.code==='P2002'){
             return NextResponse.json({error: {message: "Department name already exists", detials: error}}, { status: 400 })
         }
-        // console.log(error)
+        console.log(error)
         return NextResponse.json({error: {message: "Failed to update department name.", details: error}}, { status: 400 })
     }
 

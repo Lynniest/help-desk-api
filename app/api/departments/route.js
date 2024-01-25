@@ -27,10 +27,11 @@ export const POST = async(request) =>{
         })
         return NextResponse.json({message: "New Department added successfully.", department: newDept}, { status: 200});
     }catch(error){
+        console.log(error);
          if (error instanceof ZodError) {
         return NextResponse.json({error: { message: "Failed to add new department.", details:error.issues}}, { status: 400 });
     }
-        // console.log(error);
+        
         return new Response(JSON.stringify({error: {message: "Failed to add new department", details: error}}), {status: 400})
     }
 }

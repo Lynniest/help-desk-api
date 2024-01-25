@@ -12,7 +12,7 @@ export const GET = async (request, context) => {
     const records = await findMultiRecords('categoryName', value, 'ticketCategory');
         return NextResponse.json(records);
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         return NextResponse.json({error: {message: "Failed to find ticket categories", details: error}}, { status: 400 })
     }
 

@@ -33,6 +33,7 @@ export async function POST(request) {
     return NextResponse.json({ message: "Verification email sent successfully.", user: userWithoutPassword}, { status: 200 });
 
   } catch (error) {
+    console.log(error)
     if (error instanceof ZodError) {
       return NextResponse.json({ error: { message: "Failed to add user details.", details: error } }, { status: 400 });
     }

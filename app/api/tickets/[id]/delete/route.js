@@ -19,7 +19,7 @@ export const POST = async (request, context) => {
         });
     return NextResponse.json({message: "Ticket Deleted Successfully.", department: deletedDept}, { status: 200 });
     } catch (error) {
-        // console.log(error)
+        console.log(error)
         if (error.name === "PrismaClientKnownRequestError"){
             return NextResponse.json({error: {message: error.meta.cause, details: error}}, { status: 400 })
         }

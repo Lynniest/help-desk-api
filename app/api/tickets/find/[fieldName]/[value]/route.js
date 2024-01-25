@@ -17,7 +17,7 @@ export const GET = async (request, context) => {
     const records = sortTicketsByStatus(tickets, 'all', 'none');
         return NextResponse.json(records);
     } catch (error) {
-        // console.log(error)
+        console.log(error)
         return NextResponse.json({error: {message: "failed to find tickets!", details: error}}, { status: 400 })
     }
 
