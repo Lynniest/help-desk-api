@@ -1,4 +1,3 @@
-// pages/api/send_verification_email.js
 "use server";
 import {NextResponse} from "next/server";
 

@@ -8,8 +8,10 @@ CREATE TABLE `User` (
     `password` VARCHAR(64) NOT NULL,
     `phoneNo` VARCHAR(15) NOT NULL,
     `userType` ENUM('User', 'Employee', 'Adminstrator') NOT NULL DEFAULT 'User',
-    `userToken` VARCHAR(64) NULL,
+    `userToken` VARCHAR(255) NULL,
     `emailVerified` BOOLEAN NOT NULL DEFAULT false,
+    `createdDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `lastModifiedDate` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     UNIQUE INDEX `User_username_key`(`username`),
@@ -22,11 +24,11 @@ CREATE TABLE `Ticket` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `description` TEXT NOT NULL,
     `title` VARCHAR(64) NOT NULL,
-    `submittedDate` DATETIME(3) NOT NULL,
+    `submittedDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `categoryId` INTEGER NOT NULL,
     `departmentId` INTEGER NOT NULL,
     `startDate` DATETIME(3) NULL,
-    `lastUpdatedDate` DATETIME(3) NULL,
+    `lastModifiedDate` DATETIME(3) NULL,
     `endDate` DATETIME(3) NULL,
     `issuerId` INTEGER NOT NULL,
     `assigneeId` INTEGER NULL,
@@ -41,6 +43,8 @@ CREATE TABLE `Ticket` (
 CREATE TABLE `Department` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `departmentName` VARCHAR(64) NOT NULL,
+    `createdDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `lastModifiedDate` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `Department_departmentName_key`(`departmentName`),
     PRIMARY KEY (`id`)
@@ -50,6 +54,8 @@ CREATE TABLE `Department` (
 CREATE TABLE `TicketCategory` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `categoryName` VARCHAR(64) NOT NULL,
+    `createdDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `lastModifiedDate` DATETIME(3) NULL,
 
     UNIQUE INDEX `TicketCategory_categoryName_key`(`categoryName`),
     PRIMARY KEY (`id`)

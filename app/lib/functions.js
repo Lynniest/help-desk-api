@@ -9,6 +9,14 @@ const userIncludes = {
                     assignedTickets: true,
                 }
 
+const ticketIncludes = {
+                    category: true,
+                    department: true,
+                    assignee: true,
+                    issuer: true,
+                
+                }
+
 const includes = {
     tickets: true,
 }
@@ -83,6 +91,7 @@ export const findSingleRecord = async (fieldName, value, tableName) => {
                 where: {
                     [fieldName]: value,
                 },
+                include: ticketIncludes,
             });
             break;
         default:
@@ -100,13 +109,13 @@ export const findMultiRecords = async (fieldName, value, tableName) => {
             let users = [];
             fieldName === "userType" || fieldName==="emailVerified" ? 
             users = await prisma.user.findMany(findObjForEnums(fieldName, value, userIncludes)) :
-            users = await prisma.user.findMany(findObj(fieldName, value));
+            users = await prisma.user.findMany(findObj(fieldName, value, userIncludes));
             records = users.map(({ userToken,password, ...userWithoutToken }) => userWithoutToken);
             break;
         case 'ticket':
             fieldName === "priority" || fieldName === "status" ? 
-            records = await prisma.ticket.findMany(findObjForEnums(fieldName, value, null)) :
-            records = await prisma.ticket.findMany(findObj(fieldName, value, null));
+            records = await prisma.ticket.findMany(findObjForEnums(fieldName, value, ticketIncludes)) :
+            records = await prisma.ticket.findMany(findObj(fieldName, value, ticketIncludes));
             break;
         case 'department':
             records = await prisma.department.findMany({
@@ -148,7 +157,7 @@ export const findAllRecords = async (tableName) => {
             records = await prisma.ticketCategory.findMany({include: includes});
             break;
         case 'ticket':
-            records = await prisma.ticket.findMany();
+            records = await prisma.ticket.findMany({include: ticketIncludes});
             break;
         default:
             throw new Error(`Invalid table name: ${tableName}`);
@@ -268,28 +277,27 @@ export const updateRecordById = async ({id, data, tableName}) => {
 }
 
 export async function userTokenValidation(request) {
+    
   const authHeader = await request.headers.get('authorization');
-//   console.log(authHeader)
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return false;
   }
 
     const token = await authHeader.split(' ')[1];
-    
+
     const idToDecrypt =  token.split(':')[0];
     // console.log(iv)
     const decipher = crypto.createDecipheriv(process.env.ALGORITHM, key, iv);
-
     let duid = decipher.update(idToDecrypt, 'hex','utf8');
-    
     duid += decipher.final('utf8');
+    const searchParams = {
+            userToken: token,
+            id: Number(duid),
+        }
 
   const user = await prisma.user.findUnique({
-    where: {
-        userToken: token,
-        id: Number(duid),
-    }
+    where: searchParams,
   });
 //   console.log(user.id)
   if (!user) {

@@ -21,7 +21,7 @@ async function sendEmail(userEmail, userId, type) {
       subject: 'Email Verification',
       html: `
         <h2>Please click on the link below to verify your email</h2>
-        <p>${process.env.HOST_URL}/api/register/verify_email/${token}</p>
+        <p>${process.env.NEXT_PUBLIC_HOST_URL}/api/register/verify_email/${token}</p>
       `,
     };
   }
@@ -32,7 +32,7 @@ async function sendEmail(userEmail, userId, type) {
       subject: 'Reset Password',
       html: `
         <h2>Please click on the link below to reset your password</h2>
-        <p>${process.env.HOST_URL}/reset_password/${token}</p>
+        <p>${process.env.NEXT_PUBLIC_HOST_URL}/reset_password/${token}</p>
       `,
     };
   }

@@ -1,16 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button"
-import React from 'react'
 import axios from 'axios';
 
-const page = (request) => {
-    // console.log(request) 
-    // console.log(process.env.API_URL)
-
+const VerifyEmailPage = (request) => {
     const {email, id} = request.params;
     const decodedEmail = decodeURIComponent(email);
-    // console.log(email, id)
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-custom-bg dark:bg-gray-900 px-4 text-center sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -23,13 +19,13 @@ const page = (request) => {
           </p>
         </div>
         <div className="mt-5">
-          <Button className="w-full bg-custom-btn" onClick={()=>{axios.post(`${process.env.API_URL}/resend_email`, { email: decodedEmail, id: id, type: "verification"})}}>Resend Verification Email</Button>
+          <Button className="w-full bg-custom-btn" onClick={async()=>{await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/resend_email`, { email: decodedEmail, id: id, type: "verification"});}}>Resend Verification Email</Button>
         </div>
       </div>
     </main>
   )
 }
-export default page
+export default VerifyEmailPage;
 
 function MailIcon(props) {
   return (

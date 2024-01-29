@@ -22,6 +22,12 @@ export async function POST(request) {
 
     const body = await request.json();
     const valid = ticketSchema.parseAsync(body);
+    if (body.title===""){
+        return NextResponse.json({error: {message: "Failed to add new ticket.", details: "Title cannot be empty."}}, { status: 400 });
+    }
+    else if(body.description===""){
+        return NextResponse.json({error: {message: "Failed to add new ticket.", details: "Description cannot be empty."}}, { status: 400 });
+    }
     try {
         const newTicket = await prisma.ticket.create({
             data:{
@@ -45,10 +51,11 @@ export async function POST(request) {
     } catch (error) {
         
         if (error instanceof ZodError) {
-            return NextResponse.json({error: {message: "Failed to add new ticket.", details: error   }}, { status: 400 });
+            return NextResponse.json({error: {message: "Failed to add new ticket.", details: error.meta.target   }}, { status: 400 });
         }
-        else if (error.code==='P2003'){
-            return NextResponse.json({error: {message: "Foreign Key Not Found.", details: error}}, { status: 400 })
+
+        if (error.code === "P2002"){
+            return NextResponse.json({error: {message: "Failed to add new ticket.", details: "Ticket already exists."}}, { status: 400 });
         }
 
         console.log(error)

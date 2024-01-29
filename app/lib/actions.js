@@ -29,6 +29,7 @@ export const submitResetPsw = async (token, previousState, formData) => {
     return {success: true};
     // router.push('/reset_password/status/success');
     } catch (error) {
+        console.log(error)
         // console.log(JSON.stringify(error));
         form_error.common = "Failed to update password.";
         return form_error;

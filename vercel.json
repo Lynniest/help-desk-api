@@ -2,5 +2,10 @@
   "crons": [{
     "path": "/api/cron",
     "schedule": "15 3 * * *"
-  }]
+  },
+  {
+    "path": "/api/cron/remove_users",
+    "schedule": "16 3 * * *"
+  }
+]
 }

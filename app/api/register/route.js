@@ -29,7 +29,7 @@ export async function POST(request) {
     await sendEmail(newUser.email, newUser.id, "verification");
     const {password, ...userWithoutPassword} = newUser;
 
-    // return NextResponse.redirect(`${process.env.HOST_URL}/register/verify_email/${newUser.email}/${newUser.id}`);
+    // return NextResponse.redirect(`${process.env.NEXT_PUBLIC_HOST_URL}/register/verify_email/${newUser.email}/${newUser.id}`);
     return NextResponse.json({ message: "Verification email sent successfully.", user: userWithoutPassword}, { status: 200 });
 
   } catch (error) {
