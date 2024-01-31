@@ -7,6 +7,6 @@ export async function GET(request){
       return NextResponse.json({error: { message: 'Missing or invalid Authorization' }}, { status: 401 });
     }
     const tickets = await findAllRecords('ticket');
-    const records = sortTicketsByStatus(tickets.records, 'all', 'none');
+    const records = sortTicketsByStatus(tickets.records, 'none', 'none');
     return NextResponse.json(records);
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
  
-// This function can be marked `async` if using `await` inside
+// This function can be marked `async` if using `await` insides
 export async function middleware(request) {
     if (request.method === 'OPTIONS') {
              return new Response(null, {

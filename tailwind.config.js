@@ -18,6 +18,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        "custom-header": "#02343F",
         'custom-bg': "#9ccddb",
         'custom-btn': "hsl(141, 31%, 39%)",
         'custom-bg-light': "#AADCB6",

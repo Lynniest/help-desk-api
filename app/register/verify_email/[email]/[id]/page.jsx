@@ -13,9 +13,10 @@ const VerifyEmailPage = (request) => {
         <div>
           <MailIcon className="mx-auto h-12 w-auto" />
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-gray-100">Check your email</h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            We have sent a verification link to your email address({decodedEmail}). Please check your email and click on the
-            verification link to complete the email verification process.
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 ">
+            We have sent a verification link to <span className="font-extrabold">{decodedEmail}</span>. Please check your email and click on the
+            verification link to complete the email verification process. <br/>
+            <span className="font-extrabold"> Accounts with unverified emails will be deleted after 30days. </span>
           </p>
         </div>
         <div className="mt-5">

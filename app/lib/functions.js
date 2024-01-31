@@ -33,10 +33,11 @@ const findObj = (fieldName, value, i) => ({
                 include: i,
             });
 
-const findObjForEnums = (fieldName, value) => ({
+const findObjForEnums = (fieldName, value, i) => ({
                 where: {
                     [fieldName]: value
                 },
+                include: i,
             });
 
 export async function checkUserUnique(fieldName, value) {
@@ -113,9 +114,9 @@ export const findMultiRecords = async (fieldName, value, tableName) => {
             records = users.map(({ userToken,password, ...userWithoutToken }) => userWithoutToken);
             break;
         case 'ticket':
-            fieldName === "priority" || fieldName === "status" ? 
-            records = await prisma.ticket.findMany(findObjForEnums(fieldName, value, ticketIncludes)) :
-            records = await prisma.ticket.findMany(findObj(fieldName, value, ticketIncludes));
+            // fieldName === "priority" || fieldName === "status" || fieldName==="issuerId" || fieldName==="assigneeId" || field ? 
+            records = await prisma.ticket.findMany(findObjForEnums(fieldName, value, ticketIncludes));
+            // records = await prisma.ticket.findMany(findObj(fieldName, value, ticketIncludes));
             break;
         case 'department':
             records = await prisma.department.findMany({
@@ -287,10 +288,9 @@ export async function userTokenValidation(request) {
     const token = await authHeader.split(' ')[1];
 
     const idToDecrypt =  token.split(':')[0];
-    // console.log(iv)
-    const decipher = crypto.createDecipheriv(process.env.ALGORITHM, key, iv);
-    let duid = decipher.update(idToDecrypt, 'hex','utf8');
-    duid += decipher.final('utf8');
+
+    const duid = decrypt(idToDecrypt);
+
     const searchParams = {
             userToken: token,
             id: Number(duid),
@@ -313,13 +313,23 @@ export async function scheduleTokenUpdates(userId) {
   });
 }
 
-export async function updateUserToken(userId) {
-
-    const ctoken = crypto.randomBytes(10).toString('hex');
-
+export function encrypt(valueToEncrypt){
     const cipher = crypto.createCipheriv(process.env.ALGORITHM, key, iv);
-    let encryptedID = cipher.update(userId.toString(), 'utf8', 'hex');
-    encryptedID += cipher.final('hex');
+    let encryptedValue = cipher.update(valueToEncrypt, 'utf8', 'hex');
+    encryptedValue += cipher.final('hex');
+    return encryptedValue;
+}
+
+export function decrypt(encryptedValue){
+    const decipher = crypto.createDecipheriv(process.env.ALGORITHM, key, iv);
+    let decryptedValue = decipher.update(encryptedValue, 'hex','utf8');
+    decryptedValue += decipher.final('utf8');
+    return decryptedValue;
+}
+
+export async function updateUserToken(userId) {
+    const ctoken = crypto.randomBytes(10).toString('hex');
+    const encryptedID = encrypt(userId.toString());
 
     const newToken = `${encryptedID}:${ctoken}`;
 
