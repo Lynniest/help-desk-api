@@ -4,11 +4,16 @@ import { userSchema } from "@/app/lib/schema_validation";
 import { sendEmail } from "@/app/lib/send_mail";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
+import multer from "multer";
+import nextConnect from 'next-connect';
 
+const upload = multer({ dest: "uploads/profilePics/" });
+const handler = nextConnect();
 
-export async function POST(request) {
+handler.use(upload.single("profilePic"));
 
-  const body = await request.json();
+handler.post(async (request) => {
+    const body = await request.json();
 
   try {
     const valid = await userSchema.parseAsync(body);
@@ -39,4 +44,6 @@ export async function POST(request) {
     }
     return new Response(JSON.stringify({ error: { message: "Failed to send verification email.", details: error } }), { status: 400 });
   }
-}
+});
+
+export default handler;

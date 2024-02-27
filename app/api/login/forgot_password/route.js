@@ -15,7 +15,7 @@ export const POST = async(request) =>{
         return NextResponse.json({ message: "Email sent successfully.", user: user }, { status: 200 });
 
     } catch (error) {
-        console.log(error);
+        console.log(error);      
         return NextResponse.json({error: {message: "Failed to send email to reset password.", details: error}}, {status: 400});
     }
     
