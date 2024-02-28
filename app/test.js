@@ -10,32 +10,124 @@ if (process.env.NODE_ENV === "production") {
     }
     prisma = global.prisma;
 }
+
+// let sessionData = {};
+// const username="lynniest"
+// let sentMsgs = [];
+// let receivedMsgs = [];
  
-const fun = async() =>{
-      try {
-    const users = await prisma.user.findMany({
-      where: {
-        emailVerified: false,
-      },
-    });
-    // console.log(users)
-  if(users) { 
-    await Promise.all(users.map(async (user) => {
-        const created_date =new Date( user.createdDate);
-        console.log(created_date)
-        const today = new Date();
-        console.log(today)
-        const diffTime = Math.abs(today - created_date);
-        const diffDays = diffTime / (1000 * 60 * 60 * 24)
-        console.log(diffDays)
-    }));
+// const fun = async() =>{
+//       try {
+//     const data = await prisma.message.findMany({
+//       where: {
+//         sender: {
+//           username: "lynniest",
+//         },
+        
+//       },
+//       include: {
+//           receiver: true,
+//           sender: true,
+//       }
+//     });
+//     // console.log(data)
+//           data.forEach((msg) => {
+//             if (!sessionData[username]) {
+//                   sessionData[username] = {};
+//                 }
+//             if (msg.sender.username === username){
+//                 sentMsgs.push({
+//                     receiver: msg.receiver.username,
+//                     message: msg.message,
+//                     emittedDate: msg.emittedDate,
+//                     status: msg.status,
+//                 });
+//                 sessionData[username].sentMsgs = sentMsgs;
+//                 // console.log(sessionData[username])
+//             } else {
+//                 receivedMsgs.push({
+//                     sender: msg.sender.username,
+//                     message: msg.message,
+//                     emittedDate: msg.emittedDate,
+//                     status: msg.status,
+//                 });
+//                 sessionData[username].receivedMsgs = receivedMsgs;
+//             }
+//         });
+
+//     console.log(JSON.stringify(sessionData));
     
-}
-//   return NextResponse.json({ message: "Schedule Updated Successfully." }, {status: 200});
+// //   return NextResponse.json({ message: "Schedule Updated Successfully." }, {status: 200});
     
-  } catch (error) {
-    // return NextResponse.json({ message: "Failed to schedule tokens.", details: error}, {status: 400});
-  }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
+
+// fun();
+
+const fetch = async(socket) => {
+
+    let sessionData = {};
+    let sentMsgs = [];
+  let receivedMsgs = [];
+  
+    const username = "lynniest"
+    let data = [];
+    // const username = socket.handshake.auth.username;
+    try {
+        data = await prisma.message.findMany(
+            {
+                where: {
+                    sender: {
+                    username: username,
+                    },
+                },
+                include: {
+                    recipient: true,
+                    sender: true,
+                }
+            });
+    } catch (error) {
+        console.log(error);
+    }
+    
+    if (data.length>0){
+          await data.forEach((msg) => {
+            if (!sessionData[username]) {
+                  sessionData[username] = {};
+                }
+            if (msg.sender.username === username){
+                sentMsgs.push({
+                    recipient: msg.recipient.username,
+                    message: msg.message,
+                    emittedDate: msg.emittedDate,
+                    status: msg.status,
+                });
+                sessionData[username].sentMsgs = sentMsgs;
+                // console.log(sessionData[username])
+            } else {
+                receivedMsgs.push({
+                    sender: msg.sender.username,
+                    message: msg.message,
+                    emittedDate: msg.emittedDate,
+                    status: msg.status,
+                });
+                sessionData[username].receivedMsgs = receivedMsgs;
+            }
+        });
+        // console.log(JSON.stringify(sessionData));
+        return sessionData;
+    }
+    else {
+        return null;
+    }
+};
+
+async function fetchData() {
+  const h = await fetch();
+  console.log(JSON.stringify(h));
 }
 
-fun();
+fetchData();

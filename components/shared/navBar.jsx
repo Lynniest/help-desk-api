@@ -4,7 +4,7 @@ import Link from 'next/link';
 const NavBar = () => {
   return (
     <div className='w-full flex justify-between items-center px-10 py-2 bg-custom-bg-light mb-2 text-white'>
-      <Image src='/assets/images/logo.png' alt='logo' width={400} height={400} />
+      <Image src='/favicon.ico' alt='logo' width={75} height={75} sizes="(max-width: 768px) 100vw, 33vw" />
       <ul className='flex justify-between items-center text-lg'>
           <li className='mr-10'>
             <Link href="">Home</Link>

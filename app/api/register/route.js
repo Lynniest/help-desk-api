@@ -37,6 +37,6 @@ export async function POST(request) {
     if (error instanceof ZodError) {
       return NextResponse.json({ error: { message: "Failed to add user details.", details: error } }, { status: 400 });
     }
-    return new Response(JSON.stringify({ error: { message: "Failed to send verification email.", details: error } }), { status: 400 });
+    return new Response(JSON.stringify({ error: { message: "Failed to send verification email.", details: JSON.stringify(error) } }), { status: 400 });
   }
 }
